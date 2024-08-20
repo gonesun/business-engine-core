@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.apache.commons.beanutils.BeanMap;
 
@@ -111,6 +112,7 @@ public class DocHandler {
             handleMerge(entry, key);
         } else {
             addEntry(entry, detail, null);
+            entry.getSummaryList().add(entry.getSummary());
             entryMap.put(key, entry);
         }
         Boolean orderByFlag = voucher.getOrderByFlag();
@@ -152,6 +154,11 @@ public class DocHandler {
             amount = existEntry.getAmountDr();
         }
         existEntry.setPrice(DoubleUtil.divPrice(amount, existEntry.getQuantity()));
+        // 需要合并拼接摘要时，进行不同摘要的拼接
+        if(entry.isMergeSummary() && !existEntry.getSummaryList().contains(entry.getSummary())){
+            existEntry.getSummaryList().add(entry.getSummary());
+            existEntry.setSummary(String.join("；", existEntry.getSummaryList()));
+        }
     }
 
     private InnerFiDocEntryDto getDocEntryDto(DocTemplate docTemplate, BusinessVoucherDetail detail) {
@@ -208,6 +215,7 @@ public class DocHandler {
         if (!detail.getMerge()) {
             key.append("_summary").append(summary);
         }
+        entry.setMergeSummary(detail.getMerge());
         entry.setSummary(summary);
 
         entry.setAccountId(account.getId());
@@ -448,7 +456,6 @@ public class DocHandler {
     /**
      * 获取结算情况明细对应的分录摘要
      * @param settle
-     * @param voucher
      * @param payDocTemplate
      * @return
      */
@@ -569,7 +576,6 @@ public class DocHandler {
      * 根据结算凭证模板和流水账结算明细获取对应的科目信息，没有获取到时返回 {@code null}
      * @param settleTemplate 结算凭证模板信息
      * @param settle 流水账结算明细信息
-     * @param accountMap 科目信息 map
      * @return 科目信息
      */
     public Account getAccount(SettleTemplate settleTemplate, BusinessVoucherSettle settle) {

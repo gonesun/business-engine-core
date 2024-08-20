@@ -1,6 +1,8 @@
 package com.github.outerman.be.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DocEntry implements Serializable {
 
@@ -8,6 +10,11 @@ public class DocEntry implements Serializable {
 
     /** 摘要[set_Summary]  */
     private String summary;
+    private List<String> summaryList = new ArrayList<>();
+    /**
+     * 不同摘要时，是否合并拼接摘要
+     */
+    private boolean mergeSummary = false;
 
     /** 科目ID[set_account]  */
     private Long accountId;
@@ -114,6 +121,22 @@ public class DocEntry implements Serializable {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public List<String> getSummaryList() {
+        return summaryList;
+    }
+
+    public void setSummaryList(List<String> summaryList) {
+        this.summaryList = summaryList;
+    }
+
+    public boolean isMergeSummary() {
+        return mergeSummary;
+    }
+
+    public void setMergeSummary(boolean mergeSummary) {
+        this.mergeSummary = mergeSummary;
     }
 
     /** 汇率  */
