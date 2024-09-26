@@ -24,6 +24,7 @@ import com.github.outerman.be.template.BusinessTemplate;
 import com.github.outerman.be.util.AmountGetter;
 import com.github.outerman.be.util.DoubleUtil;
 import com.github.outerman.be.util.StringUtil;
+import org.apache.commons.lang3.BooleanUtils;
 
 public class DocHandler {
 
@@ -433,8 +434,8 @@ public class DocHandler {
             direction = 0;
         }
         boolean isCr = direction != null && direction.equals(1);
-        // 处理分录借贷方向、正负金额是否需要颠倒
-        if (payDocTemplate.getReversal() && amount < 0) {
+        // 处理分录借贷方向、正负金额是否需要颠倒(前提：结算分录没设置不转换)
+        if (payDocTemplate.getReversal() && amount < 0 && BooleanUtils.isNotFalse(settle.getReversal())) {
             isCr = !isCr;
             amount*= -1;
             entry.setReversal(true);

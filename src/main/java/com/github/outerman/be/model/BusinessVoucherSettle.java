@@ -40,6 +40,9 @@ public class BusinessVoucherSettle {
     /** 金额取值 map */
     private Map<String, Object> amountMap;
 
+    /** 金额为负数时是否颠倒借贷方向 有值时结算分录已此处值为准 */
+    private Boolean reversal;
+
     /**
      * 获取bankAccountId
      * @return bankAccountId
@@ -232,4 +235,11 @@ public class BusinessVoucherSettle {
         this.amountMap = amountMap;
     }
 
+    public Boolean getReversal() {
+        return reversal;
+    }
+
+    public void setReversal(Boolean reversal) {
+        this.reversal = reversal;
+    }
 }
