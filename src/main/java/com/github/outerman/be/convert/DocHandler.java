@@ -424,6 +424,7 @@ public class DocHandler {
         }
 
         String summary = getSettleSummary(settle, payDocTemplate);
+        entry.setMergeSummary(settle.getMerge());
         entry.setSummary(summary);
         entry.setAccountId(account.getId());
         entry.setAccountCode(account.getCode());
