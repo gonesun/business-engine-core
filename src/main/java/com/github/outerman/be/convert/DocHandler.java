@@ -382,6 +382,7 @@ public class DocHandler {
         } else {
             addEntry(entry, null, settle);
             if (settle.getMerge()) {
+                entry.getSummaryList().add(entry.getSummary());
                 entryMap.put(key, entry);
             }
         }
